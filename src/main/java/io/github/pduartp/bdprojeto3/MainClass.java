@@ -115,7 +115,7 @@ public class MainClass {
 //        
 //        new ContaPrincipalJogoDao().deleteByPk(contaPrincipal);
 //</editor-fold>
-        //<editor-fold defaultstate="collapsed" desc="CRUD ContaSecundariaJogo (OK)">
+        //<editor-fold defaultstate="collapsed" desc="CRUD CompraJogo (OK)">
 //        new ContaSecundariaJogoDao().saveOrUpdate(contaSecundaria, true);
 //        new ContaSecundariaJogoDao().saveOrUpdate(contaSecundaria2, true);
 //        ContaSecundariaJogo contaSecundariaAux

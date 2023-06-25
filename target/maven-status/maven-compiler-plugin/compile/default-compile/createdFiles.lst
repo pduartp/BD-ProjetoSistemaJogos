@@ -1,9 +1,11 @@
+gui\TelaCadastroVenda$9.class
 entidade\CompraJogo.class
 repositorio\Dao.class
 gui\TelaCadastroVenda$3.class
 gui\TelaCadastroVenda$2.class
 gui\TelaCadastroVenda$4.class
 gui\TelaCadastroVenda.class
+gui\TelaCadastroVenda$8.class
 gui\TelaCadastroVenda$6.class
 repositorio\UsuarioJogoDao.class
 repositorio\DbConnection.class
