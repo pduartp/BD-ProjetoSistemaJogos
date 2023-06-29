@@ -31,24 +31,24 @@ import java.util.logging.Logger;
  *
  * @author patri
  *
- *<code>
+ * <code>
  * CREATE TABLE contaSecundariaJogo (
-    nickNameSecundaria VARCHAR(15) NOT NULL,
-    cpf VARCHAR(14),
-    nickNamePrincipal VARCHAR(15),
-    login VARCHAR(20),
-    senha VARCHAR(20),
-    perguntaSeguranca VARCHAR(60),
-    respostaSeguranca VARCHAR(60),
-    permCardCred NUMBER(1) DEFAULT 0,
-    permContImp NUMBER(1) DEFAULT 0,
-    CONSTRAINT pk_nickNameCs PRIMARY KEY (nickNameSecundaria),
-    CONSTRAINT fk_nickNameCs FOREIGN KEY (nickNameSecundaria) REFERENCES contaVinculoJogo(nickName),
-    CONSTRAINT fk_nickNameCp2 FOREIGN KEY (nickNamePrincipal) REFERENCES contaPrincipalJogo(nickNamePrincipal),
-    CONSTRAINT fk_cpfUr2 FOREIGN KEY (cpf) REFERENCES usuarioJogo(cpf)
-    );
+ * nickNameSecundaria VARCHAR(15) NOT NULL,
+ * cpf VARCHAR(14),
+ * nickNamePrincipal VARCHAR(15),
+ * login VARCHAR(20),
+ * senha VARCHAR(20),
+ * perguntaSeguranca VARCHAR(60),
+ * respostaSeguranca VARCHAR(60),
+ * permCardCred NUMBER(1) DEFAULT 0,
+ * permContImp NUMBER(1) DEFAULT 0,
+ * CONSTRAINT pk_nickNameCs PRIMARY KEY (nickNameSecundaria),
+ * CONSTRAINT fk_nickNameCs FOREIGN KEY (nickNameSecundaria) REFERENCES contaVinculoJogo(nickName),
+ * CONSTRAINT fk_nickNameCp2 FOREIGN KEY (nickNamePrincipal) REFERENCES contaPrincipalJogo(nickNamePrincipal),
+ * CONSTRAINT fk_cpfUr2 FOREIGN KEY (cpf) REFERENCES usuarioJogo(cpf)
+ * );
  * </code>
- * 
+ *
  */
 public class ContaSecundariaJogoDao
         extends Dao<ContaSecundariaJogo> {
@@ -148,16 +148,18 @@ public class ContaSecundariaJogoDao
             usuario = new UsuarioJogo();
             usuario.setCpf(resultSet.getString("cpf"));
             usuarioDao = new UsuarioJogoDao();
+            usuario = usuarioDao.findByPk(usuario);
 
             contaPrincipal = new ContaPrincipalJogo();
             contaPrincipal.setNickName(resultSet.getString("nickNamePrincipal"));
             contaPrincipalDao = new ContaPrincipalJogoDao();
+            contaPrincipal = contaPrincipalDao.findByPk(contaPrincipal);
 
             contaSecundaria = new ContaSecundariaJogo();
 
             contaSecundaria.setNickName(resultSet.getString("nickNameSecundaria"));
-            contaSecundaria.setUsuarioJogo(usuarioDao.findByPk(usuario));
-            contaSecundaria.setContaPrincipalJogo(contaPrincipalDao.findByPk(contaPrincipal));
+            contaSecundaria.setUsuarioJogo(usuario);
+            contaSecundaria.setContaPrincipalJogo(contaPrincipal);
             contaSecundaria.setLogin(resultSet.getString("login"));
             contaSecundaria.setSenha(resultSet.getString("senha"));
             contaSecundaria.setPerguntaSeguranca(resultSet.getString("perguntaSeguranca"));
@@ -173,5 +175,4 @@ public class ContaSecundariaJogoDao
         }
         return contaSecundaria;
     }
-
 }

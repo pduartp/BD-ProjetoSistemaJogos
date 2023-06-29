@@ -67,8 +67,9 @@ CREATE TABLE compraJogo (
    CONSTRAINT fk_nickNameCon FOREIGN KEY (nickName) REFERENCES contaVinculoJogo(nickName)
 );
 
--- delete from compraJogo;
--- delete from contaSecundariaJogo;
--- delete from contaPrincipalJogo;
--- delete from contaVinculoJogo;
--- delete from usuarioJogo;
+delete from compraJogo;
+delete from contaSecundariaJogo;
+delete from contaPrincipalJogo;
+delete from contaVinculoJogo;
+
+delete from usuarioJogo;

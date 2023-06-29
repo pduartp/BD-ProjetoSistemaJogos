@@ -96,7 +96,7 @@ public class ContaPrincipalJogo
     public String toString() {
         return '\n'
                 + "ContaPrincipal{"
-                + "nickName" + getNickName()
+                + "nickName=" + getNickName()
                 + ", cpf=" + usuario.getCpf()
                 + ", login=" + login
                 + ", senha=" + senha

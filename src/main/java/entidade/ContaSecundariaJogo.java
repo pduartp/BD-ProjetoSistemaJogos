@@ -140,12 +140,12 @@ public class ContaSecundariaJogo
                 + "nickName=" + getNickName()
                 + ", cpf=" + usuario.getCpf()
                 + ", nickNamePrincipal=" + contaPrincipal.getNickName()
-                + ", permissaoCardCredito=" + permissaoCardCredito
-                + ", permissaoContImproprio=" + permissaoContImproprio
                 + ", login=" + login
                 + ", senha=" + senha
                 + ", perguntaSeguranca=" + perguntaSeguranca
                 + ", respostaSeguranca=" + respostaSeguranca
+                + ", permissaoCardCredito=" + permissaoCardCredito
+                + ", permissaoContImproprio=" + permissaoContImproprio
                 + '}';
     }
 

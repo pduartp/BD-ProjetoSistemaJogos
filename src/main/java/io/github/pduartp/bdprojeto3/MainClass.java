@@ -19,44 +19,44 @@ import repositorio.CompraJogoDao;
 public class MainClass {
 
     public static void main(String[] args) throws Exception {
-        //<editor-fold defaultstate="collapsed" desc="Objetos">
-        UsuarioJogo usuario = new UsuarioJogo(
-                "Pedrinho", "123", 18, "08/09/2006", "Japan", "pedro123@hot.com");
-        UsuarioJogo usuario2 = new UsuarioJogo(
-                "João", "456", 22, "08/01/2004", "Brasil", "joão@pet.com");
-        UsuarioJogo usuario3 = new UsuarioJogo(
-                "Bruninho rebenta correntes", "789", 30,
-                "08/07/2001", "Tailandia", "bru@gmail.com");
-
-//        TODO: IMPLEMENTAR ENUM PARA tipoConta
-        ContaVinculoJogo contaVinculo = new ContaVinculoJogo(
-                "maleniaBOM", "secundária");
-        ContaVinculoJogo contaVinculo2 = new ContaVinculoJogo(
-                "feijaozinho1", "primária");
-        ContaVinculoJogo contaVinculo3 = new ContaVinculoJogo(
-                "apaixonadh1", "secundária");
-
-        ContaPrincipalJogo contaPrincipal = new ContaPrincipalJogo(
-                "pedroa", "111", "Nome da Mae", "Maria",
-                usuario, contaVinculo2.getNickName(), contaVinculo2.getTipoConta());
-
-        ContaSecundariaJogo contaSecundaria = new ContaSecundariaJogo("joa",
-                "23231", "Irmao", "Pedro", (int) 0, (int) 0, usuario2,
-                contaPrincipal, contaVinculo.getNickName(),
-                contaVinculo.getNickName());
-
-        ContaSecundariaJogo contaSecundaria2 = new ContaSecundariaJogo("brbruno1",
-                "32r3", "-", "-", (int) 1, (int) 1, usuario3,
-                contaPrincipal, contaVinculo3.getNickName(),
-                contaVinculo3.getNickName());
-
-        CompraJogo compra = new CompraJogo(
-                (int) 1, LocalDate.now(), 300, 500, contaVinculo
-        );
-
-        CompraJogo compra2 = new CompraJogo(
-                (int) 2, LocalDate.now(), 33300, 2500, contaVinculo
-        );
+        //        //<editor-fold defaultstate="collapsed" desc="Objetos">
+//        UsuarioJogo usuario = new UsuarioJogo(
+//                "Vivian Zago Siqueira", "71351197460", 18, "17/09/2000", "Japan", "pedro123@hot.com");
+//        UsuarioJogo usuario2 = new UsuarioJogo(
+//                "João", "456", 22, "08/01/2004", "Brasil", "joão@pet.com");
+//        UsuarioJogo usuario3 = new UsuarioJogo(
+//                "Bruninho rebenta correntes", "789", 30,
+//                "08/07/2001", "Tailandia", "bru@gmail.com");
+//
+////        TODO: IMPLEMENTAR ENUM PARA tipoConta
+//        ContaVinculoJogo contaVinculo = new ContaVinculoJogo(
+//                "maleniaBOM", "secundária");
+//        ContaVinculoJogo contaVinculo2 = new ContaVinculoJogo(
+//                "feijaozinho1", "primária");
+//        ContaVinculoJogo contaVinculo3 = new ContaVinculoJogo(
+//                "apaixonadh1", "secundária");
+//
+//        ContaPrincipalJogo contaPrincipal = new ContaPrincipalJogo(
+//                "pedroa", "111", "Nome da Mae", "Maria",
+//                usuario, contaVinculo2.getNickName(), contaVinculo2.getTipoConta());
+//
+//        ContaSecundariaJogo contaSecundaria = new ContaSecundariaJogo("joa",
+//                "23231", "Irmao", "Pedro", (int) 0, (int) 0, usuario2,
+//                contaPrincipal, contaVinculo.getNickName(),
+//                contaVinculo.getNickName());
+//
+//        ContaSecundariaJogo contaSecundaria2 = new ContaSecundariaJogo("brbruno1",
+//                "32r3", "-", "-", (int) 1, (int) 1, usuario3,
+//                contaPrincipal, contaVinculo3.getNickName(),
+//                contaVinculo3.getNickName());
+//
+//        CompraJogo compra = new CompraJogo(
+//                (int) 1, LocalDate.now(), 300, 500, contaVinculo
+//        );
+//
+//        CompraJogo compra2 = new CompraJogo(
+//                (int) 2, LocalDate.now(), 33300, 2500, contaVinculo
+//        );
         
 //</editor-fold>
 
