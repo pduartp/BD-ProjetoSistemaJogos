@@ -83,8 +83,8 @@ public class ContaSecundariaJogoDao
             pstmt.setString(4, e.getSenha());
             pstmt.setString(5, e.getPerguntaSeguranca());
             pstmt.setString(6, e.getRespostaSeguranca());
-            pstmt.setInt(7, e.isPermissaoCardCredito());
-            pstmt.setInt(8, e.isPermissaoContImproprio());
+            pstmt.setInt(7, e.getPermissaoCardCredito());
+            pstmt.setInt(8, e.getPermissaoContImproprio());
             pstmt.setString(9, e.getNickName());
 
         } catch (SQLException ex)

@@ -38,11 +38,12 @@ import repositorio.ContaVinculoJogoDao;
  * @author patri
  */
 public class TelaCadastroVenda extends javax.swing.JFrame {
-
+    public static TelaCadastroVenda instance;
+    
     /**
      * Creates new form CadastroVenda
      */
-    public TelaCadastroVenda() {
+    private TelaCadastroVenda() {
         initComponents();
 
         try
@@ -61,7 +62,15 @@ public class TelaCadastroVenda extends javax.swing.JFrame {
             Logger.getLogger(TelaCadastroVenda.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    
+    public static TelaCadastroVenda getInstance() {
+        if(instance == null) {
+            instance = new TelaCadastroVenda();
+        }
+        
+        return instance;
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

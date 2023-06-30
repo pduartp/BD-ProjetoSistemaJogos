@@ -60,7 +60,7 @@ public class ContaSecundariaJogo
 
 //</editor-fold>
     //<editor-fold defaultstate="collapsed" desc="Getters / Setters">
-    public Integer isPermissaoCardCredito() {
+    public Integer getPermissaoCardCredito() {
         return permissaoCardCredito;
     }
 
@@ -68,7 +68,7 @@ public class ContaSecundariaJogo
         this.permissaoCardCredito = permissaoCardCredito;
     }
 
-    public Integer isPermissaoContImproprio() {
+    public Integer getPermissaoContImproprio() {
         return permissaoContImproprio;
     }
 

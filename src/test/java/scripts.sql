@@ -8,9 +8,11 @@
  */
 
 DROP TABLE compraJogo;
+
 DROP TABLE contaSecundariaJogo;
 DROP TABLE contaPrincipalJogo;
 DROP TABLE contaVinculoJogo;
+
 DROP TABLE usuarioJogo;
 
 CREATE TABLE usuarioJogo (
@@ -68,6 +70,7 @@ CREATE TABLE compraJogo (
 );
 
 delete from compraJogo;
+
 delete from contaSecundariaJogo;
 delete from contaPrincipalJogo;
 delete from contaVinculoJogo;

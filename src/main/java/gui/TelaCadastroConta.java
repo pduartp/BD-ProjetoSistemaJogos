@@ -22,10 +22,15 @@ import entidade.ContaPrincipalJogo;
 import entidade.ContaSecundariaJogo;
 import entidade.ContaVinculoJogo;
 import entidade.UsuarioJogo;
+import java.awt.Dimension;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JDialog;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 import repositorio.ContaPrincipalJogoDao;
 import repositorio.ContaSecundariaJogoDao;
 import repositorio.ContaVinculoJogoDao;
@@ -37,38 +42,21 @@ import repositorio.UsuarioJogoDao;
  */
 public class TelaCadastroConta extends javax.swing.JFrame {
 
+    private static TelaCadastroConta instance;
+
     /**
      * Creates new form TelaCadastroConta
      */
-    public TelaCadastroConta() {
+    private TelaCadastroConta() {
         initComponents();
 
-        cbxSelecionarContaPrinCadastrada.addItem("");
-
-        // Inciia com alguns radios bottons marcados
-        rdMarcarPrincipal.setSelected(true); // Marcar o RadioButton "rdMarcarPrincipal"
-        cbxSelecionarContaPrinCadastrada.setEnabled(false);
-
-        // Desbloquear os radio buttons de adicionar uma conta secundária
-        rdContaSecundariaMarcarNao.setSelected(true); // Marcar o RadioButton "rdContaSecundariaMarcarNao"
-
-        // Desbloquear o combobox de selecionar um ID de conta secundária
-        cbxSelecionarContaSecCadastrada.setEnabled(false);
-
-        // Desbloquear os radio buttons de autorizar uso de cartão de crédito
-        rdAutorizaCardCredNao.setEnabled(false);
-        rdAutorizaCardCredSim.setEnabled(false);
-
-        // Desbloquear os radio buttons de consumo de conteúdo impróprio
-        rdMarcarAutorizaContImpNao.setEnabled(false);
-        rdMarcarAutorizaContImpSim.setEnabled(false);
+        txtExibeContaPrincipalCadastrada.setEditable(false);
 
         try
         {
-            // Adiciona CPF e nickNames da conta principal e secundária no combo-box
+            // Adiciona CPF e nickNames da conta secundária no combo-box
 
             List<UsuarioJogo> usuarios = new UsuarioJogoDao().findAll();
-
             List<ContaPrincipalJogo> contasP = new ContaPrincipalJogoDao().findAll();
             List<ContaSecundariaJogo> contasS = new ContaSecundariaJogoDao().findAll();
 
@@ -77,14 +65,6 @@ public class TelaCadastroConta extends javax.swing.JFrame {
                 for (UsuarioJogo u : usuarios)
                 {
                     cbxSelecionarCPF.addItem(u.getCpf());
-                }
-            }
-            if (contasP != null)
-            {
-                for (ContaPrincipalJogo c : contasP)
-                {
-                    cbxSelecionarContaPrinCadastrada.addItem(c.getNickName());
-
                 }
             }
             if (contasS != null)
@@ -99,6 +79,15 @@ public class TelaCadastroConta extends javax.swing.JFrame {
         {
             Logger.getLogger(TelaCadastroConta.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    public static TelaCadastroConta getInstance() {
+        if (instance == null)
+        {
+            instance = new TelaCadastroConta();
+        }
+
+        return instance;
     }
 
     /**
@@ -157,7 +146,7 @@ public class TelaCadastroConta extends javax.swing.JFrame {
         btnRemover = new javax.swing.JButton();
         jSeparator8 = new javax.swing.JSeparator();
         lblSelecionarContaPrincipalCadastrada = new javax.swing.JLabel();
-        cbxSelecionarContaPrinCadastrada = new javax.swing.JComboBox<>();
+        txtExibeContaPrincipalCadastrada = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -220,11 +209,6 @@ public class TelaCadastroConta extends javax.swing.JFrame {
         lblInserirLogin.setText("login:");
 
         txtInserirLogin.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        txtInserirLogin.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtInserirLoginActionPerformed(evt);
-            }
-        });
 
         lblInserirSenha.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         lblInserirSenha.setForeground(new java.awt.Color(0, 0, 0));
@@ -252,7 +236,7 @@ public class TelaCadastroConta extends javax.swing.JFrame {
         lblInserirPerguntaSegurança.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblInserirPerguntaSegurança.setText("Pergunta de Segurança:");
 
-        txtInserirPerguntaSeguranca.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        txtInserirPerguntaSeguranca.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
         lblInserirRespostaSegurança.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         lblInserirRespostaSegurança.setForeground(new java.awt.Color(0, 0, 0));
@@ -291,7 +275,7 @@ public class TelaCadastroConta extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel2.setText("Conta Secundária Cadastrada:");
+        jLabel2.setText("Vincule com o nickName");
 
         lblMarcarAutorizaCardCredito.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         lblMarcarAutorizaCardCredito.setForeground(new java.awt.Color(0, 0, 0));
@@ -342,9 +326,19 @@ public class TelaCadastroConta extends javax.swing.JFrame {
 
         btnAtualizar.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnAtualizar.setText("Atualizar");
+        btnAtualizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAtualizarActionPerformed(evt);
+            }
+        });
 
         btnListar.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnListar.setText("Listar");
+        btnListar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnListarActionPerformed(evt);
+            }
+        });
 
         btnRemover.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnRemover.setText("Remover");
@@ -360,7 +354,12 @@ public class TelaCadastroConta extends javax.swing.JFrame {
         lblSelecionarContaPrincipalCadastrada.setText("Conta Principal Cadastrada:");
         lblSelecionarContaPrincipalCadastrada.setToolTipText("");
 
-        cbxSelecionarContaPrinCadastrada.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        txtExibeContaPrincipalCadastrada.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        txtExibeContaPrincipalCadastrada.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtExibeContaPrincipalCadastradaActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panel1Layout = new javax.swing.GroupLayout(panel1);
         panel1.setLayout(panel1Layout);
@@ -455,7 +454,7 @@ public class TelaCadastroConta extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(lblSelecionarContaPrincipalCadastrada)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cbxSelecionarContaPrinCadastrada, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(txtExibeContaPrincipalCadastrada, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         panel1Layout.setVerticalGroup(
@@ -488,7 +487,7 @@ public class TelaCadastroConta extends javax.swing.JFrame {
                     .addComponent(lblSelecionarCPFCadastrado)
                     .addComponent(cbxSelecionarCPF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblSelecionarContaPrincipalCadastrada)
-                    .addComponent(cbxSelecionarContaPrinCadastrada, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtExibeContaPrincipalCadastrada))
                 .addGap(18, 18, 18)
                 .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -540,7 +539,7 @@ public class TelaCadastroConta extends javax.swing.JFrame {
                     .addComponent(btnRemover))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator8, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -563,22 +562,22 @@ public class TelaCadastroConta extends javax.swing.JFrame {
         pack();
     }//GEN-END:initComponents
 
-    private void txtInserirLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtInserirLoginActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtInserirLoginActionPerformed
-
     private void psInserirSenhaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_psInserirSenhaMouseClicked
         // Limpa o campo de senha
         psInserirSenha.setText("");
     }//GEN-LAST:event_psInserirSenhaMouseClicked
 
     private void btnLimparCamposMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnLimparCamposMouseClicked
+        rdMarcarPrincipal.setEnabled(true);
+        rdMarcarSecundaria.setEnabled(true);
+
         // Limpar os campos de texto
         txtInserirLogin.setText("");
         txtInserirNickName.setText("");
         txtInserirPerguntaSeguranca.setText("");
         txtInserirRespostaSeguranca.setText("");
         txtPesquisarNickName.setText("");
+        txtExibeContaPrincipalCadastrada.setText(" ");
 
         psInserirSenha.setText("***************************");
 
@@ -587,6 +586,22 @@ public class TelaCadastroConta extends javax.swing.JFrame {
         btngAdicionarContaSecundaria.clearSelection();
         btngAutorizarCartaoCred.clearSelection();
         btngAutorizarContImp.clearSelection();
+
+        // Desbloquear os radio buttons de adicionar uma conta secundária
+        rdContaSecundariaMarcarNao.setEnabled(true);
+        rdContaSecundariaMarcarSim.setEnabled(true);
+
+        // Desbloquear o combobox de selecionar um ID de conta secundária
+        cbxSelecionarContaSecCadastrada.setEnabled(true);
+
+        // Desbloquear os radio buttons de autorizar uso de cartão de crédito
+        rdAutorizaCardCredNao.setEnabled(true);
+        rdAutorizaCardCredSim.setEnabled(true);
+
+        // Desbloquear os radio buttons de consumo de conteúdo impróprio
+        rdMarcarAutorizaContImpNao.setEnabled(true);
+        rdMarcarAutorizaContImpSim.setEnabled(true);
+
     }//GEN-LAST:event_btnLimparCamposMouseClicked
 
     private void rdContaSecundariaMarcarSimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdContaSecundariaMarcarSimActionPerformed
@@ -605,12 +620,7 @@ public class TelaCadastroConta extends javax.swing.JFrame {
         ContaPrincipalJogo contaPrincipal = new ContaPrincipalJogo();
         ContaSecundariaJogo contaSecundaria = new ContaSecundariaJogo();
 
-        ContaVinculoJogoDao contaVinculoDao = new ContaVinculoJogoDao();
-        ContaPrincipalJogoDao contaPrincipalDao = new ContaPrincipalJogoDao();
-        ContaSecundariaJogoDao contaSecundariaDao = new ContaSecundariaJogoDao();
-
         UsuarioJogo usuario = new UsuarioJogo();
-        UsuarioJogoDao usuarioDao = new UsuarioJogoDao();
 
         // Verifica se todos os campos foram preenchidos e os radiobuttons foram selecionados
         if (txtInserirNickName.getText().isEmpty()
@@ -638,7 +648,7 @@ public class TelaCadastroConta extends javax.swing.JFrame {
             {
                 // Salva os dados de conta vinculo como principal
                 contaVinculo.setTipoConta("Principal");
-                contaVinculoDao.saveOrUpdate(contaVinculo, true);
+                new ContaVinculoJogoDao().saveOrUpdate(contaVinculo, true);
 
                 usuario.setCpf((String) cbxSelecionarCPF.getSelectedItem());
                 // Seta o CPF de usuario na conta principal
@@ -646,13 +656,15 @@ public class TelaCadastroConta extends javax.swing.JFrame {
 
                 // Seta o nickname de contaVinculo na conta principal
                 contaPrincipal.setNickName(contaVinculo.getNickName());
-
-                contaPrincipal.setLogin(txtInserirLogin.getText());
+                contaPrincipal.setTipoConta(contaVinculo.getTipoConta());
 
                 // Seta os demais dados
+                contaPrincipal.setLogin(txtInserirLogin.getText());
                 contaPrincipal.setSenha(new String(psInserirSenha.getPassword()));
                 contaPrincipal.setPerguntaSeguranca(txtInserirPerguntaSeguranca.getText());
                 contaPrincipal.setRespostaSeguranca(txtInserirRespostaSeguranca.getText());
+
+                new ContaPrincipalJogoDao().saveOrUpdate(contaPrincipal, true);
 
                 // Verifica se o usuário quer adicionar uma conta secundária na conta principal
                 if (rdContaSecundariaMarcarSim.isSelected())
@@ -661,7 +673,7 @@ public class TelaCadastroConta extends javax.swing.JFrame {
                     String nickNameSelecionado = (String) cbxSelecionarContaSecCadastrada.getSelectedItem();
                     contaSecundaria.setNickName(nickNameSelecionado);
                     // Seta o registro do banco de dados correspondente ao id da conta secundária
-                    contaSecundaria = contaSecundariaDao.findByPk(contaSecundaria);
+                    contaSecundaria = new ContaSecundariaJogoDao().findByPk(contaSecundaria);
 
                     contaSecundaria.setContaPrincipalJogo(contaPrincipal);
 
@@ -685,40 +697,30 @@ public class TelaCadastroConta extends javax.swing.JFrame {
                         contaSecundaria.setPermissaoContImproprio(0);
                     }
 
-                    System.out.println(">" + contaPrincipal);
-                    System.out.println("> " + contaSecundaria);
-
-                    contaSecundariaDao.saveOrUpdate(contaSecundaria, false);
-
-                    // Remove o nickname da conta secundária no combobox
-                    cbxSelecionarContaSecCadastrada.removeItem(contaSecundaria.getNickName());
+                    new ContaSecundariaJogoDao().saveOrUpdate(contaSecundaria, false);
                 }
-                
-                contaPrincipalDao.saveOrUpdate(contaPrincipal, true);
-                
-                // Adiciona no combo box de conta principal cadastrada
-                cbxSelecionarContaPrinCadastrada.addItem(contaPrincipal.getNickName());
             }
             // Usuário cadastra conta secundaria ao invés da principal
             if (rdMarcarSecundaria.isSelected())
             {
                 // Salva os dados de conta vinculo como secundária
                 contaVinculo.setTipoConta("Secundária");
-                contaVinculoDao.saveOrUpdate(contaVinculo, true);
+                new ContaVinculoJogoDao().saveOrUpdate(contaVinculo, true);
 
                 // Seta o nickname de contaVinculo na conta secundaria
                 contaSecundaria.setNickName(contaVinculo.getNickName());
+                contaSecundaria.setTipoConta(contaVinculo.getTipoConta());
 
                 // Seta o CPF de usuario na conta principal
                 usuario.setCpf((String) cbxSelecionarCPF.getSelectedItem());
                 contaSecundaria.setUsuarioJogo(usuario);
 
                 // Uma conta secundaria recebe a chave estrangeira de contaPrincipal
-                String contaPrincipalSelecionada = (String) cbxSelecionarContaPrinCadastrada.getSelectedItem();
+                String contaPrincipalSelecionada = (String) txtExibeContaPrincipalCadastrada.getSelectedText();
                 if (contaPrincipalSelecionada != null)
                 {
                     contaPrincipal.setNickName(contaPrincipalSelecionada);
-                    contaPrincipalDao.findByPk(contaPrincipal);
+                    contaPrincipal = new ContaPrincipalJogoDao().findByPk(contaPrincipal);
 
                     // Se a conta secundaria que ser vinculada em uma conta principal, seta uma conta principal
                     contaSecundaria.setContaPrincipalJogo(contaPrincipal);
@@ -731,25 +733,23 @@ public class TelaCadastroConta extends javax.swing.JFrame {
                 contaSecundaria.setPerguntaSeguranca(txtInserirPerguntaSeguranca.getText());
                 contaSecundaria.setRespostaSeguranca(txtInserirRespostaSeguranca.getText());
 
-                // PADRÃO: A conta secundária ainda não está vinculada com a conta principal
                 contaSecundaria.setPermissaoCardCredito(0);
                 contaSecundaria.setPermissaoContImproprio(0);
+                contaSecundaria.setContaPrincipalJogo(contaPrincipal);
 
                 // Salva as informações de conta secundária
-                contaSecundariaDao.saveOrUpdate(contaSecundaria, true);
+                new ContaSecundariaJogoDao().saveOrUpdate(contaSecundaria, true);
 
                 // Adiciona uma conta secundaria no combo obox
                 cbxSelecionarContaSecCadastrada.addItem(contaSecundaria.getNickName());
             }
-
-            // Remove um nickname de combobox da conta principal
-            cbxSelecionarContaPrinCadastrada.removeItem(contaPrincipal.getNickName());
 
             // Remove o cpf do combobox
             cbxSelecionarCPF.removeItem(usuario.getCpf());
 
             JOptionPane.showMessageDialog(
                     null, "Conta Cadastrada com Sucesso!");
+
         } catch (Exception ex)
         {
             Logger.getLogger(TelaCadastroConta.class.getName()).log(Level.SEVERE, null, ex);
@@ -757,86 +757,181 @@ public class TelaCadastroConta extends javax.swing.JFrame {
     }//GEN-LAST:event_btnInserirActionPerformed
 
     private void btnRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverActionPerformed
-        // TODO add your handling code here:
+        try
+        {
+            // Obter o nickname do usuário que será excluído
+            String nickName = txtInserirNickName.getText();
+
+            // Cria uma istância dos objetos
+            ContaVinculoJogo contaVinculo = new ContaVinculoJogo();
+            ContaPrincipalJogo contaPrincipal = new ContaPrincipalJogo();
+            ContaSecundariaJogo contaSecundaria = new ContaSecundariaJogo();
+
+            // Seta primeiramente em conta vinculo
+            contaVinculo.setNickName(nickName);
+
+            // Procura um id na tabela de contaVincula
+            contaVinculo = new ContaVinculoJogoDao().findByPk(contaVinculo);
+
+            // Caso não for nulo
+            if (contaVinculo != null)
+            {
+                if ("Principal".equals(contaVinculo.getTipoConta()))
+                {
+                    // Procura o nickname primeiro na conta principal
+                    contaPrincipal.setNickName(nickName);
+                    contaPrincipal = new ContaPrincipalJogoDao().findByPk(contaPrincipal);
+
+                    // Adiciona novamente o CPF no combo box
+                    cbxSelecionarCPF.addItem(contaPrincipal.getUsuarioJogo().getCpf());
+
+                    // Exclue a conta principal
+                    new ContaPrincipalJogoDao().deleteByPk(contaPrincipal);
+                }
+
+                if ("Secundária".equals(contaVinculo.getTipoConta()))
+                {
+                    // Caso não encontrou, procura o nick name da conta secundaria
+                    contaSecundaria.setNickName(nickName);
+                    contaSecundaria = new ContaSecundariaJogoDao().findByPk(contaSecundaria);
+
+                    // Adiciona novamente o CPF no combo box
+                    cbxSelecionarCPF.addItem(contaSecundaria.getUsuarioJogo().getCpf());
+
+                    // Exclue a conta secundaria
+                    new ContaSecundariaJogoDao().deleteByPk(contaSecundaria);
+
+                    // Remove uma contaSecundaria do combo box
+                    cbxSelecionarContaSecCadastrada.removeItem(nickName);
+                }
+
+                // Por fim, deleta a conta secundária
+                new ContaVinculoJogoDao().deleteByPk(contaVinculo);
+
+                JOptionPane.showMessageDialog(null, "Conta excluída com sucesso!");
+            } else
+            {
+                JOptionPane.showMessageDialog(null, "Conta não encontrada.", "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (Exception ex)
+        {
+            Logger.getLogger(TelaCadastroConta.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }//GEN-LAST:event_btnRemoverActionPerformed
 
     private void btnPesquisarNickNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesquisarNickNameActionPerformed
-        String nickName = txtPesquisarNickName.getText();
-
-        ContaVinculoJogo contaVinculo = new ContaVinculoJogo();
-        ContaPrincipalJogo contaPrincipal = new ContaPrincipalJogo();
-        ContaSecundariaJogo contaSecundaria = new ContaSecundariaJogo();
-
-        contaVinculo.setNickName(nickName);
-
-        if (nickName.isEmpty())
+        // Verificar se o campo nickName se encontra preenchido
+        if (txtPesquisarNickName.getText().isEmpty())
         {
-            JOptionPane.showMessageDialog(null, "Por favor, digite um nickName válido.", "Erro", JOptionPane.ERROR_MESSAGE);
-            return;
+            JOptionPane.showMessageDialog(null, "NickName da conta não foi fornecido.", "Erro", JOptionPane.ERROR_MESSAGE);
+            return; // Sai do método se o ID não for fornecido
         }
 
         try
         {
-            ContaVinculoJogoDao contaVinculoDao = new ContaVinculoJogoDao();
-            ContaPrincipalJogoDao contaPrincipalDao = new ContaPrincipalJogoDao();
-            ContaSecundariaJogoDao contaSecundariaDao = new ContaSecundariaJogoDao();
+            // Obter o nickname do usuário que será excluído
+            String nickName = txtPesquisarNickName.getText();
 
-            contaVinculo = contaVinculoDao.findByPk(contaVinculo);
+            // Cria uma istância dos objetos
+            ContaVinculoJogo contaVinculo = new ContaVinculoJogo();
+            ContaPrincipalJogo contaPrincipal = new ContaPrincipalJogo();
+            ContaSecundariaJogo contaSecundaria = new ContaSecundariaJogo();
 
-            if (contaVinculo == null)
+            // Seta primeiramente em conta vinculo
+            contaVinculo.setNickName(nickName);
+
+            // Procura um id na tabela de contaVincula
+            contaVinculo = new ContaVinculoJogoDao().findByPk(contaVinculo);
+
+            // Verifica se o campo de pesquisa de nickname está vazio
+            if (nickName.isEmpty())
             {
-                JOptionPane.showMessageDialog(null, "Nenhum dado encontrado para o nickName informado.", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(
+                        null, "Digite um nickname para pesquisar.",
+                        "Erro", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
-            txtInserirNickName.setText(contaVinculo.getNickName());
-
-            if (contaVinculo.getTipoConta().equals("Principal"))
+            if (contaVinculo != null)
             {
-//                TODO IMPLEMENTAR
-                rdMarcarPrincipal.setSelected(true);
-                rdMarcarSecundaria.setSelected(false);
+                rdMarcarPrincipal.setEnabled(false);
+                rdMarcarSecundaria.setEnabled(false);
 
-                contaPrincipal.setNickName(nickName);
-                contaPrincipal = contaPrincipalDao.findByPk(contaPrincipal);
-
-                if (contaPrincipal != null)
+                if ("Principal".equals(contaVinculo.getTipoConta()))
                 {
-                    cbxSelecionarCPF.setSelectedItem(contaPrincipal.getUsuarioJogo().getCpf());
+                    rdMarcarPrincipal.setSelected(true);
+
+                    // Verifica se existe uma conta principal com o nickname pesquisado
+                    contaPrincipal.setNickName(nickName);
+                    contaPrincipal = new ContaPrincipalJogoDao().findByPk(contaPrincipal);
+
+                    // Carrega os dados de conta principal
+                    txtInserirNickName.setText(contaPrincipal.getNickName());
                     txtInserirLogin.setText(contaPrincipal.getLogin());
                     psInserirSenha.setText(contaPrincipal.getSenha());
                     txtInserirPerguntaSeguranca.setText(contaPrincipal.getPerguntaSeguranca());
                     txtInserirRespostaSeguranca.setText(contaPrincipal.getRespostaSeguranca());
                 }
-            } else if (contaVinculo.getTipoConta().equals("Secundária"))
-            {
-                rdMarcarPrincipal.setSelected(false);
-                rdMarcarSecundaria.setSelected(true);
 
-                contaSecundaria.setNickName(nickName);
-                contaSecundaria = contaSecundariaDao.findByPk(contaSecundaria);
-
-                if (contaSecundaria != null)
+                if ("Secundária".equals(contaVinculo.getTipoConta()))
                 {
-                    cbxSelecionarCPF.setSelectedItem(contaSecundaria.getUsuarioJogo().getCpf());
+                    rdMarcarSecundaria.setSelected(true);
+
+                    // Verifica se existe uma conta secundária com o nickname pesquisado
+                    contaSecundaria.setNickName(nickName);
+                    contaSecundaria = new ContaSecundariaJogoDao().findByPk(contaSecundaria);
+
+                    // Verifica se a conta secundária tem uma chave estrangeira cadastrada
+                    if (contaSecundaria.getContaPrincipalJogo() != null)
+                    {
+                        txtExibeContaPrincipalCadastrada.setText(contaSecundaria.getContaPrincipalJogo().getNickName());
+                    }
+
+                    // Carrega os dados de conta secundaria
+                    txtInserirNickName.setText(contaPrincipal.getNickName());
                     txtInserirLogin.setText(contaSecundaria.getLogin());
                     psInserirSenha.setText(contaSecundaria.getSenha());
                     txtInserirPerguntaSeguranca.setText(contaSecundaria.getPerguntaSeguranca());
                     txtInserirRespostaSeguranca.setText(contaSecundaria.getRespostaSeguranca());
-                }
-            }
 
-            // Verificar e preencher os outros campos conforme necessário
+                    // Carregar as permissões da conta secundária
+                    if (contaSecundaria.getPermissaoCardCredito() == 1)
+                    {
+                        rdAutorizaCardCredSim.setSelected(true);
+                    } else
+                    {
+                        rdAutorizaCardCredNao.setSelected(true);
+                    }
+
+                    if (contaSecundaria.getPermissaoContImproprio() == 1)
+                    {
+                        rdMarcarAutorizaContImpSim.setSelected(true);
+                    } else
+                    {
+                        rdMarcarAutorizaContImpNao.setSelected(true);
+                    }
+                }
+
+                JOptionPane.showMessageDialog(null, "Conta encontrada com sucesso!");
+            } else
+            {
+                // Caso não encontre uma conta com o nickname pesquisado
+                JOptionPane.showMessageDialog(
+                        null, "Nickname não encontrado ou inválido.",
+                        "Erro", JOptionPane.ERROR_MESSAGE);
+            }
         } catch (Exception ex)
         {
-            Logger.getLogger(TelaCadastroConta.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(TelaCadastroConta.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnPesquisarNickNameActionPerformed
 
     private void rdMarcarPrincipalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdMarcarPrincipalActionPerformed
         if (rdMarcarPrincipal.isSelected())
         {
-            cbxSelecionarContaPrinCadastrada.setEnabled(false);
+            txtExibeContaPrincipalCadastrada.setEnabled(false);
 
             // Desbloquear os radio buttons de adicionar uma conta secundária
             rdContaSecundariaMarcarNao.setEnabled(true);
@@ -858,34 +953,253 @@ public class TelaCadastroConta extends javax.swing.JFrame {
     private void rdMarcarSecundariaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdMarcarSecundariaActionPerformed
         if (rdMarcarSecundaria.isSelected())
         {
-            cbxSelecionarContaPrinCadastrada.setEnabled(true);
+            txtExibeContaPrincipalCadastrada.setEnabled(true);
 
             // Bloquear os radio buttons de adicionar uma conta secundária
             rdContaSecundariaMarcarNao.setEnabled(false);
             rdContaSecundariaMarcarSim.setEnabled(false);
 
-            // Bloquear o combobox de selecionar um ID de conta secundária
             cbxSelecionarContaSecCadastrada.setEnabled(false);
 
-            // Bloquear os radio buttons de autorizar uso de cartão de crédito
             rdAutorizaCardCredNao.setEnabled(false);
             rdAutorizaCardCredSim.setEnabled(false);
 
-            // Bloquear os radio buttons de consumo de conteúdo impróprio
             rdMarcarAutorizaContImpNao.setEnabled(false);
             rdMarcarAutorizaContImpSim.setEnabled(false);
+
         }
     }//GEN-LAST:event_rdMarcarSecundariaActionPerformed
 
     private void rdContaSecundariaMarcarNaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdContaSecundariaMarcarNaoActionPerformed
-        cbxSelecionarContaSecCadastrada.setEnabled(false);
+        if (rdContaSecundariaMarcarNao.isSelected())
+        {
+            cbxSelecionarContaSecCadastrada.setEnabled(false);
 
-        rdAutorizaCardCredSim.setEnabled(false);
-        rdAutorizaCardCredNao.setEnabled(false);
+            rdAutorizaCardCredSim.setEnabled(false);
+            rdAutorizaCardCredNao.setEnabled(false);
 
-        rdMarcarAutorizaContImpSim.setEnabled(false);
-        rdMarcarAutorizaContImpNao.setEnabled(false);
+            rdMarcarAutorizaContImpSim.setEnabled(false);
+            rdMarcarAutorizaContImpNao.setEnabled(false);
+        }
     }//GEN-LAST:event_rdContaSecundariaMarcarNaoActionPerformed
+
+    private void btnListarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListarActionPerformed
+        try
+        {
+            // Cria um modelo de tabela para armazenar os dados das contas
+            DefaultTableModel model = new DefaultTableModel();
+//            model.addColumn("Tipo de Conta");
+            model.addColumn("Nickname");
+            model.addColumn("Login");
+            model.addColumn("Senha");
+            model.addColumn("Pergunta de Segurança");
+            model.addColumn("Resposta de Segurança");
+            model.addColumn("Autorização de Cartão de Crédito");
+            model.addColumn("Autorização de Conteúdo Impróprio");
+            model.addColumn("Conta Principal Vinculada");
+
+            // Adiciona as contas principais à tabela
+            List<ContaPrincipalJogo> contasPrincipais = new ContaPrincipalJogoDao().findAll();
+            if (contasPrincipais != null)
+            {
+                for (ContaPrincipalJogo contaPrincipal : contasPrincipais)
+                {
+                    Object[] rowData =
+                    {
+//                        contaPrincipal.getTipoConta(),
+                        contaPrincipal.getNickName(),
+                        contaPrincipal.getLogin(),
+                        contaPrincipal.getSenha(),
+                        contaPrincipal.getPerguntaSeguranca(),
+                        contaPrincipal.getRespostaSeguranca(),
+                        "-", // N/A para contas principais
+                        "-",
+                        "-"
+                    };
+                    model.addRow(rowData);
+                }
+            }
+
+            // Adiciona as contas secundárias à tabela
+            List<ContaSecundariaJogo> contasSecundarias = new ContaSecundariaJogoDao().findAll();
+            if (contasSecundarias != null)
+            {
+                for (ContaSecundariaJogo contaSecundaria : contasSecundarias)
+                {
+                    String permissaoCardCredito;
+                    String permissaoContImproprio;
+
+                    if (contaSecundaria.getPermissaoCardCredito() == 1)
+                    {
+                        permissaoCardCredito = "Sim";
+                    } else
+                    {
+                        permissaoCardCredito = "Não";
+                    }
+
+                    if (contaSecundaria.getPermissaoContImproprio() == 1)
+                    {
+                        permissaoContImproprio = "Sim";
+                    } else
+                    {
+                        permissaoContImproprio = "Não";
+                    }
+                    Object[] rowData =
+                    {
+//                        contaSecundaria.getTipoConta(),
+                        contaSecundaria.getNickName(),
+                        contaSecundaria.getLogin(),
+                        contaSecundaria.getSenha(),
+                        contaSecundaria.getPerguntaSeguranca(),
+                        contaSecundaria.getRespostaSeguranca(),
+                        permissaoCardCredito,
+                        permissaoContImproprio,
+                        contaSecundaria.getContaPrincipalJogo() != null ? contaSecundaria.getContaPrincipalJogo().getNickName() : "-"
+                    };
+                    model.addRow(rowData);
+                }
+            }
+
+            // Cria o componente JTable com o modelo de tabela
+            JTable table = new JTable(model);
+
+            // Adiciona a tabela a um JScrollPane para permitir rolagem
+            JScrollPane scrollPane = new JScrollPane(table);
+
+            // Cria um JDialog personalizado
+            JDialog dialog = new JDialog();
+            dialog.setTitle("Lista de Contas");
+            dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+            dialog.setPreferredSize(new Dimension(800, 600));
+            dialog.setResizable(true);
+
+            // Adiciona o JScrollPane ao JDialog
+            dialog.getContentPane().add(scrollPane);
+
+            // Ajusta o tamanho do JDialog para se adaptar ao conteúdo
+            dialog.pack();
+
+            // Define a visibilidade do JDialog como verdadeiro
+            dialog.setVisible(true);
+
+        } catch (Exception ex)
+        {
+            Logger.getLogger(TelaCadastroConta.class
+                    .getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnListarActionPerformed
+
+    private void btnAtualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtualizarActionPerformed
+        try
+        {
+            String nickName = txtPesquisarNickName.getText();
+
+            // Istancia as contas
+            ContaVinculoJogo contaVinculo = new ContaVinculoJogo();
+            ContaPrincipalJogo contaPrincipal = new ContaPrincipalJogo();
+            ContaSecundariaJogo contaSecundaria = new ContaSecundariaJogo();
+
+            // Procura primeiramente se existe na tabela de contaVinculo
+            contaVinculo.setNickName(nickName);
+            contaVinculo = new ContaVinculoJogoDao().findByPk(contaVinculo);
+
+            // Caso exista
+            if (contaVinculo != null)
+            {
+                // Se for uma conta principal
+                if ("Principal".equals(contaVinculo.getTipoConta()))
+                {
+                    // Procura no banco de dados
+                    contaPrincipal.setNickName(nickName);
+                    contaPrincipal = new ContaPrincipalJogoDao().findByPk(contaPrincipal);
+
+                    // Insere os dados de nickname contundo, deve ser alterado o nickname também de contavinculo                    
+//                    contaVinculo.setNickName(txtInserirNickName.getText());
+//                    contaPrincipal.setNickName(contaVinculo.getNickName());
+                    // Insere os demais dados
+                    contaPrincipal.setLogin(txtInserirLogin.getText());
+                    contaPrincipal.setSenha(psInserirSenha.getText());
+
+                    contaPrincipal.setPerguntaSeguranca(txtInserirPerguntaSeguranca.getText());
+                    contaPrincipal.setRespostaSeguranca(txtInserirRespostaSeguranca.getText());
+
+//                    new ContaVinculoJogoDao().saveOrUpdate(contaVinculo, false);
+                    new ContaPrincipalJogoDao().saveOrUpdate(contaPrincipal, false);
+
+                    // Procura uma possível conta secundária vinculada a principal
+                    contaSecundaria.setNickName((String) cbxSelecionarContaSecCadastrada.getSelectedItem());
+
+                    contaSecundaria = new ContaSecundariaJogoDao().findByPk(contaSecundaria);
+                    contaSecundaria.setContaPrincipalJogo(contaPrincipal);
+
+                    // Verifica se o usuário quer adicionar uma conta secundária na conta principal
+                    if (rdContaSecundariaMarcarSim.isSelected())
+                    {
+                        // Pega um nickname de uma conta secundárias existente
+                        String nickNameSelecionado = (String) cbxSelecionarContaSecCadastrada.getSelectedItem();
+                        contaSecundaria.setNickName(nickNameSelecionado);
+                        // Seta o registro do banco de dados correspondente ao id da conta secundária
+                        contaSecundaria = new ContaSecundariaJogoDao().findByPk(contaSecundaria);
+
+                        contaSecundaria.setContaPrincipalJogo(contaPrincipal);
+
+                        // Seta as permissões da conta secundaria
+                        if (rdAutorizaCardCredSim.isSelected())
+                        {
+                            contaSecundaria.setPermissaoCardCredito(1);
+
+                        }
+                        if (rdAutorizaCardCredNao.isSelected())
+                        {
+                            contaSecundaria.setPermissaoCardCredito(0);
+                        }
+
+                        if (rdMarcarAutorizaContImpSim.isSelected())
+                        {
+                            contaSecundaria.setPermissaoContImproprio(1);
+                        }
+                        if (rdMarcarAutorizaContImpNao.isSelected())
+                        {
+                            contaSecundaria.setPermissaoContImproprio(0);
+                        }
+
+                        new ContaSecundariaJogoDao().saveOrUpdate(contaSecundaria, false);
+                        cbxSelecionarContaSecCadastrada.removeItem(contaSecundaria.getNickName());
+                    }
+                }
+
+                if ("Secundária".equals(contaVinculo.getTipoConta()))
+                {
+                    contaSecundaria.setNickName(nickName);
+                    contaSecundaria = new ContaSecundariaJogoDao().findByPk(contaSecundaria);
+
+                    contaSecundaria.setLogin(txtInserirLogin.getText());
+                    contaSecundaria.setSenha(psInserirSenha.getText());
+
+                    contaSecundaria.setPerguntaSeguranca(txtInserirPerguntaSeguranca.getText());
+                    contaSecundaria.setRespostaSeguranca(txtInserirRespostaSeguranca.getText());
+
+                    new ContaSecundariaJogoDao().saveOrUpdate(contaSecundaria, false);
+                }
+
+                JOptionPane.showMessageDialog(
+                        null, "Conta Atualizada com Sucesso!");
+            } else
+            {
+                // Caso não encontre uma conta com o nickname pesquisado
+                JOptionPane.showMessageDialog(
+                        null, "Não foi possível efetuar a atualização",
+                        "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (Exception ex)
+        {
+            Logger.getLogger(TelaCadastroConta.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnAtualizarActionPerformed
+
+    private void txtExibeContaPrincipalCadastradaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtExibeContaPrincipalCadastradaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtExibeContaPrincipalCadastradaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -907,26 +1221,15 @@ public class TelaCadastroConta extends javax.swing.JFrame {
 
                 }
             }
-        } catch (ClassNotFoundException ex)
+        } catch (ClassNotFoundException | InstantiationException
+                | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex)
         {
             java.util.logging.Logger.getLogger(TelaCadastroConta.class
                     .getName()).log(java.util.logging.Level.SEVERE, null, ex);
 
-        } catch (InstantiationException ex)
-        {
-            java.util.logging.Logger.getLogger(TelaCadastroConta.class
-                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
-
-        } catch (IllegalAccessException ex)
-        {
-            java.util.logging.Logger.getLogger(TelaCadastroConta.class
-                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
-
-        } catch (javax.swing.UnsupportedLookAndFeelException ex)
-        {
-            java.util.logging.Logger.getLogger(TelaCadastroConta.class
-                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+
         //</editor-fold>
 
         /* Create and display the form */
@@ -949,7 +1252,6 @@ public class TelaCadastroConta extends javax.swing.JFrame {
     private javax.swing.ButtonGroup btngAutorizarContImp;
     private javax.swing.ButtonGroup btngTipoConta;
     private javax.swing.JComboBox<String> cbxSelecionarCPF;
-    private javax.swing.JComboBox<String> cbxSelecionarContaPrinCadastrada;
     private javax.swing.JComboBox<String> cbxSelecionarContaSecCadastrada;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JSeparator jSeparator1;
@@ -982,6 +1284,7 @@ public class TelaCadastroConta extends javax.swing.JFrame {
     private javax.swing.JRadioButton rdMarcarAutorizaContImpSim;
     private javax.swing.JRadioButton rdMarcarPrincipal;
     private javax.swing.JRadioButton rdMarcarSecundaria;
+    private javax.swing.JTextField txtExibeContaPrincipalCadastrada;
     private javax.swing.JTextField txtInserirLogin;
     private javax.swing.JTextField txtInserirNickName;
     private javax.swing.JTextField txtInserirPerguntaSeguranca;

@@ -1,4 +1,5 @@
 gui\TelaCadastroVenda$3.class
+gui\MenuSistemasJogos$3.class
 gui\TelaCadastroVenda.class
 gui\TelaCadastroConta$3.class
 gui\TelaCadastroConta$8.class
@@ -15,6 +16,7 @@ gui\TelaCadastroConta$5.class
 gui\TelaCadastroConta.class
 repositorio\ContaPrincipalJogoDao.class
 entidade\ContaVinculoJogo.class
+gui\TelaCadastroConta$13.class
 gui\TelaCadastroVenda$9.class
 entidade\CompraJogo.class
 repositorio\Dao.class
@@ -23,11 +25,15 @@ gui\TelaCadastroConta$9.class
 gui\TelaCadastroVenda$2.class
 gui\TelaCadastroVenda$4.class
 gui\TelaCadastroConta$11.class
+gui\MenuSistemasJogos$2.class
+gui\MenuSistemasJogos$1.class
 repositorio\UsuarioJogoDao.class
 repositorio\DbConnection.class
 io\github\pduartp\bdprojeto3\MainClass.class
+gui\MenuSistemasJogos.class
 gui\TelaCadastroVenda$5.class
 gui\TelaCadastroVenda$7.class
+gui\TelaCadastroConta$12.class
 entidade\ContaPrincipalJogo.class
 entidade\ContaSecundariaJogo.class
 gui\TelaCadastroConta$6.class
